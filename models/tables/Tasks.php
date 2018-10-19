@@ -2,21 +2,18 @@
 
 namespace app\models\tables;
 
-use app\models\User;
 use Yii;
 
 /**
  * This is the model class for table "tasks".
  *
  * @property int $id
- * @property string $task_name
- * @property int $task_creater_id
- * @property int $task_owner_id
+ * @property string $name
+ * @property string $date
  * @property string $description
- * @property string $date_start
- * @property string $date_end
- * @property string $date_created
- * @property User $owner
+ * @property int $user_id
+ *
+ * @property Users $user
  */
 class Tasks extends \yii\db\ActiveRecord
 {
@@ -34,10 +31,12 @@ class Tasks extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['task_creater_id', 'task_owner_id'], 'integer'],
+            [['name', 'date'], 'required'],
+            [['date'], 'safe'],
             [['description'], 'string'],
-            [['date_start', 'date_end', 'date_created'], 'safe'],
-            [['task_name'], 'string', 'max' => 255],
+            [['user_id'], 'integer'],
+            [['name'], 'string', 'max' => 255],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -48,14 +47,18 @@ class Tasks extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'task_name' => 'Task Name',
-            'task_creater_id' => 'Task Creater ID',
-            'task_owner_id' => 'Task Owner ID',
+            'name' => 'Name',
+            'date' => 'Date',
             'description' => 'Description',
-            'date_start' => 'Date Start',
-            'date_end' => 'Date End',
-            'date_created' => 'Date Created',
+            'user_id' => 'User ID',
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(Users::class, ['id' => 'user_id']);
+    }
 }

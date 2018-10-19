@@ -14,23 +14,13 @@ class m181015_213651_create_tasks_table extends Migration
     {
         $this->createTable('tasks', [
             'id' => $this->primaryKey(),
-            'task_name' => $this->string(255),
-            'task_creater_id' => $this->integer(50),
-            'task_owner_id' => $this->integer(50),
+            'name' => $this->string()->notNull(),
+            'date' => $this->dateTime()->notNull(),
             'description' => $this->text(),
-            'date_start' => $this->date(),
-            'date_end' => $this->date(),
-            'date_created' => $this->date()
+            'user_id' => $this->integer(),
         ]);
 
-        $this->createIndex('ix_tasks_id', 'tasks', 'id', true);
-
-        $this->createTable('tasks_users', [
-            'task_id' => $this->primaryKey(),
-            'user_id' =>$this->integer(50)
-        ]);
-
-        $this->createIndex('ix_tasks_users_task_id', 'tasks_users', 'task_id', true);
+        $this->addForeignKey('fk_tasks_users', 'tasks', 'user_id', 'users', 'id');
     }
 
     /**
@@ -39,6 +29,5 @@ class m181015_213651_create_tasks_table extends Migration
     public function safeDown()
     {
         $this->dropTable('tasks');
-        $this->dropTable('tasks_users');
     }
 }

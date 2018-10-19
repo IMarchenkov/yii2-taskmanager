@@ -9,8 +9,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-
-class TasksController extends Controller
+/**
+ * AdminTaskController implements the CRUD actions for Tasks model.
+ */
+class AdminTaskController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -19,7 +21,7 @@ class TasksController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::class,
+                'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -52,7 +54,6 @@ class TasksController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'listView' => false
         ]);
     }
 

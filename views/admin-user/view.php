@@ -4,22 +4,17 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\tables\Tasks */
+/* @var $model app\models\tables\Users */
 
-$this->title = $model->name;
-
-if (!$listView) {
-    $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
-    $this->params['breadcrumbs'][] = $this->title;
-}
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="tasks-view">
+<div class="users-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php if (!$listView): ?>
-        <p><?= Html::a('Back to Calendar', ['index']) ?></p>
-    <?php endif; ?>
+
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
@@ -29,21 +24,15 @@ if (!$listView) {
                 'method' => 'post',
             ],
         ]) ?>
-        <?php if ($listView) {
-            echo Html::a('View', ['view', 'id' => $model->id], [
-                'class' => 'btn btn-success',
-            ]);
-        } ?>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
-            'name',
-            'date',
-            'description:ntext',
-            'user_id',
+            'username',
+            'password',
+            'role_id',
         ],
     ]) ?>
 

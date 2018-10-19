@@ -11,8 +11,6 @@ use Yii;
  * @property string $username
  * @property string $password
  * @property int $role_id
- * @property string $authKey
- * @property string $accessToken
  * @property Roles $role
  */
 class Users extends \yii\db\ActiveRecord
@@ -34,7 +32,7 @@ class Users extends \yii\db\ActiveRecord
             [['username', 'password'], 'required'],
             [['role_id'], 'integer'],
             [['username'], 'string', 'max' => 50],
-            [['password', 'authKey', 'accessToken'], 'string', 'max' => 100],
+            [['password'], 'string', 'max' => 100],
             [['username'], 'unique'],
         ];
     }
@@ -46,16 +44,23 @@ class Users extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'username' => 'Login',
+            'username' => 'Username',
             'password' => 'Password',
             'role_id' => 'Role ID',
-            'authKey' => 'Auth Key',
-            'accessToken' => 'Access Token',
         ];
     }
 
     public function getRole()
     {
         return $this->hasOne(Roles::class, ['id' => 'role_id']);
+    }
+
+
+    public static function getUserWithRole($id)
+    {
+        return   static::find()
+                    ->where(['id' =>$id])
+                    ->with('role')
+                    ->one();
     }
 }
