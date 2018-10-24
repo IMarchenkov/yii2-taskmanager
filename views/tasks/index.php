@@ -6,7 +6,7 @@ use yii\widgets\Pjax;
 use \yii\widgets\ListView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\tables\TaskSearch */
+/* @var $searchModel app\models\search\TaskSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Tasks';
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
-        'itemView' => 'view',
+        'itemView' => 'unit',
         'viewParams' => [
             'listView' => true,
         ]

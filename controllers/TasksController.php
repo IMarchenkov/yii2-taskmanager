@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\tables\Tasks;
 use app\models\search\TaskSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -31,13 +32,32 @@ class TasksController extends Controller
      * Lists all Tasks models.
      * @return mixed
      */
+//    public function actionIndex()
+//    {
+//        $searchModel = new TaskSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
+
     public function actionIndex()
     {
-        $searchModel = new TaskSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $model = new Tasks();
+        $query = $model::find()
+            ->where(['>', 'date', date('Y-m-d H:i:s')])
+            ->andWhere(['<', 'date', date('Y-m-d H:i:s', strtotime('+1 month'))])
+            ->andWhere(['user_id' => Yii::$app->user->id]);
 
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 5
+            ],
+        ]);
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

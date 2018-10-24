@@ -11,6 +11,8 @@ use Yii;
  * @property string $username
  * @property string $password
  * @property int $role_id
+ * @property string $email
+ *
  * @property Roles $role
  */
 class Users extends \yii\db\ActiveRecord
@@ -29,11 +31,11 @@ class Users extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'password'], 'required'],
+            [['username', 'password', 'email'], 'required'],
             [['role_id'], 'integer'],
             [['username'], 'string', 'max' => 50],
-            [['password'], 'string', 'max' => 100],
-            [['username'], 'unique'],
+            [['password','email'], 'string', 'max' => 100],
+            [['username', 'email'], 'unique'],
         ];
     }
 
@@ -47,6 +49,7 @@ class Users extends \yii\db\ActiveRecord
             'username' => 'Username',
             'password' => 'Password',
             'role_id' => 'Role ID',
+            'email' => 'Email'
         ];
     }
 
