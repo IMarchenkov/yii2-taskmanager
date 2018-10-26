@@ -42,7 +42,6 @@ if (!$listView) {
             'id',
             'name',
             'date',
-            'date_end',
             'description:ntext',
             'user_id',
         ],

@@ -12,11 +12,18 @@ use Yii;
  * @property string $password
  * @property int $role_id
  * @property string $email
+ * @property string $authKey
+ * @property string $accessToken
  *
  * @property Roles $role
+ * @property string $password_repeat
  */
+
 class Users extends \yii\db\ActiveRecord
 {
+    const SCENARIO_SIGNUP = 'signup';
+    public $password_repeat;
+
     /**
      * {@inheritdoc}
      */
@@ -32,10 +39,17 @@ class Users extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'password', 'email'], 'required'],
+            ['username', 'trim'],
+            ['username', 'unique', 'targetClass' => 'app\models\tables\Users', 'message' => 'This username has already been taken.'],
+            ['username', 'string', 'min' => 2, 'max' => 50],
+            ['username', 'match', 'pattern' => '/^[A-z][\w]+$/'],
+            ['email', 'trim'],
+            ['email', 'email'],
+            ['email', 'unique', 'targetClass' => 'app\models\tables\Users', 'message' => 'This email address has already been taken.'],
             [['role_id'], 'integer'],
-            [['username'], 'string', 'max' => 50],
-            [['password','email'], 'string', 'max' => 100],
-            [['username', 'email'], 'unique'],
+            [['password', 'password_repeat', 'email'], 'string', 'min' => 5, 'max' => 100],
+            ['password_repeat', 'required', 'on' => self::SCENARIO_SIGNUP],
+            ['password', 'compare', 'compareAttribute' => 'password_repeat', 'on' => self::SCENARIO_SIGNUP],
         ];
     }
 
@@ -48,6 +62,7 @@ class Users extends \yii\db\ActiveRecord
             'id' => 'ID',
             'username' => 'Username',
             'password' => 'Password',
+            'password_repeat' => 'Repeat password',
             'role_id' => 'Role ID',
             'email' => 'Email'
         ];
@@ -61,9 +76,9 @@ class Users extends \yii\db\ActiveRecord
 
     public static function getUserWithRole($id)
     {
-        return   static::find()
-                    ->where(['id' =>$id])
-                    ->with('role')
-                    ->one();
+        return static::find()
+            ->where(['id' => $id])
+            ->with('role')
+            ->one();
     }
 }

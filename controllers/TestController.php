@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 
+use app\components\EventsComponent;
 use app\models\tables\Users;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -18,5 +19,7 @@ class TestController extends Controller
            ->setSubject('Test message')
            ->setTextBody('Body of mail message')
            ->send();
+
+       EventsComponent::
     }
 }

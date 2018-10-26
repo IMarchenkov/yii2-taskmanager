@@ -7,6 +7,15 @@ use \app\models\tables\Users;
 /* @var $this yii\web\View */
 /* @var $model app\models\tables\Tasks */
 /* @var $form yii\widgets\ActiveForm */
+$this->registerJs(
+    "$('#tasks-date').on('change', function(){
+        var date = $('#tasks-date').val();
+            if($('#tasks-date_end').val() < date){
+                 $('#tasks-date_end').val(date);
+                 $('#tasks-date_end').attr('value', date);
+            }
+        });"
+);
 ?>
 
 <div class="tasks-form">
@@ -16,7 +25,19 @@ use \app\models\tables\Users;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'date')->textInput(['type' => 'date']) ?>
+    <?= $form->field($model, 'date')->widget(\yii\jui\DatePicker::class, [
+        'model' => $model,
+        'attribute' => 'date',
+        'language' => 'ru',
+        'dateFormat' => 'yyyy-MM-dd'
+    ]); ?>
+
+    <?= $form->field($model, 'date_end')->widget(\yii\jui\DatePicker::class, [
+        'model' => $model,
+        'attribute' => 'date_end',
+        'language' => 'ru',
+        'dateFormat' => 'yyyy-MM-dd'
+    ]); ?>
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
