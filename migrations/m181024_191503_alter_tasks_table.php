@@ -24,7 +24,7 @@ class m181024_191503_alter_tasks_table extends Migration
         $this->dropColumn('tasks', 'created_at');
         $this->dropColumn('tasks', 'updated_at');
 
-        return false;
+        return true;
     }
 
     /*

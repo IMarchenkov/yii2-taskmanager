@@ -22,7 +22,7 @@ class m181026_214630_alter_tasks_table extends Migration
     {
         $this->dropColumn('tasks', 'date_end');
 
-        return false;
+        return true;
     }
 
     /*

@@ -3,9 +3,11 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use \app\models\tables\Users;
+use \yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\tables\Tasks */
+/* @var $model app\models\tables\Files */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerJs(
     "$('#tasks-date').on('change', function(){
@@ -23,25 +25,33 @@ $this->registerJs(
 
     <?php $users = Users::find()->select(['id', 'username'])->all(); ?>
 
+    <?php if (!$model->date) $model->date = date('Y-m-d'); ?>
+
+    <?php if (!$model->date_end) $model->date_end = date('Y-m-d'); ?>
+
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'date')->widget(\yii\jui\DatePicker::class, [
+    <?= $form->field($model, 'date')->widget(DatePicker::class, [
         'model' => $model,
         'attribute' => 'date',
         'language' => 'ru',
-        'dateFormat' => 'yyyy-MM-dd'
+        'dateFormat' => 'yyyy-MM-dd',
+        'clientOptions' => ['minDate' => '+0',],
     ]); ?>
 
-    <?= $form->field($model, 'date_end')->widget(\yii\jui\DatePicker::class, [
+    <?= $form->field($model, 'date_end')->widget(DatePicker::class, [
         'model' => $model,
         'attribute' => 'date_end',
         'language' => 'ru',
-        'dateFormat' => 'yyyy-MM-dd'
+        'dateFormat' => 'yyyy-MM-dd',
+        'clientOptions' => ['minDate' => '+0',],
     ]); ?>
 
-    <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'description')->textarea(['rows' => 6]); ?>
 
-    <?= $form->field($model, 'user_id')->dropDownList(\yii\helpers\ArrayHelper::map($users, 'id', 'username')) ?>
+    <?= $form->field($model, 'user_id')->dropDownList(\yii\helpers\ArrayHelper::map($users, 'id', 'username')); ?>
+
+    <?= $form->field($modelFile, 'file[]')->fileInput(['multiple' => true]); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

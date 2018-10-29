@@ -2,30 +2,20 @@
 /**
  * Created by PhpStorm.
  * User: Igor
- * Date: 24.10.2018
- * Time: 22:41
+ * Date: 28.10.2018
+ * Time: 18:58
  */
 
-namespace app\components;
+namespace app\components\events;
 
-use app\models\tables\Users;
+
 use Yii;
-use app\models\tables\Tasks;
-use yii\base\Component;
 use yii\base\Event;
-use yii\web\YiiAsset;
+use app\models\tables\Tasks;
+use app\models\tables\Users;
 
-class EventsComponent extends Component
+class OnCreate
 {
-    public function init()
-    {
-        parent::init();
-
-        Event::on(Tasks::class, Tasks::EVENT_AFTER_INSERT, [self::class, 'handlerTaskCreate']);
-
-        Event::on(Users::class, Users::EVENT_BEFORE_INSERT, [self::class, 'handlerUserCreate']);
-    }
-
     public static function handlerTaskCreate(Event $event)
     {
         $model = $event->sender;

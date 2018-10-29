@@ -22,7 +22,7 @@ class m181024_202723_alter_users_table extends Migration
     {
         $this->dropColumn('users', 'email');
 
-        return false;
+        return true;
     }
 
     /*

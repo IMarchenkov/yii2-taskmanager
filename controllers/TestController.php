@@ -13,13 +13,16 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
-       Yii::$app->mailer->compose()
-           ->setFrom('test@testmail.org')
-           ->setTo('marchao@mail.ru')
-           ->setSubject('Test message')
-           ->setTextBody('Body of mail message')
-           ->send();
+        $userId = Yii::$app->user->id;
+        $key = 'tasks_current_task_'.$userId;
 
-       EventsComponent::
+//        $dependency = new DbDependency();
+//        $dependency->sql = "SELECT COUNT(*) FROM tasks";
+
+        $cache = Yii::$app->cache;
+
+        $dataProvider = $cache->get($key);
+
+        var_dump($dataProvider);
     }
 }

@@ -6,6 +6,8 @@ use function PHPSTORM_META\type;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use app\models\tables\Files;
+use yii\web\View;
 
 /**
  * This is the model class for table "tasks".
@@ -18,6 +20,7 @@ use yii\db\Expression;
  * @property string $date_end
  *
  * @property Users $user
+ * @property array $documents
  */
 class Tasks extends \yii\db\ActiveRecord
 {
@@ -47,13 +50,6 @@ class Tasks extends \yii\db\ActiveRecord
 
     public function beforeValidate()
     {
-//        Yii::$app->cache->flush();
-
-//        if (empty($this->date_end)){
-//            $this->date_end = $this->date;
-//        }
-//var_dump($this);
-//die();
         $this->date = strtotime($this->date);
         $this->date_end = strtotime($this->date_end);
 
@@ -101,5 +97,39 @@ class Tasks extends \yii\db\ActiveRecord
                 'value' => new Expression('NOW()'),
             ],
         ];
+    }
+
+    public static function findCurrentTasks()
+    {
+        return self::find()
+            ->where(['>', 'date', date('Y-m-d H:i:s')])
+            ->andWhere(['<', 'date', date('Y-m-d H:i:s', strtotime('+1 month'))])
+            ->andWhere(['user_id' => Yii::$app->user->id]);
+    }
+
+    public function getDocuments()
+    {
+        $documentsArray = [];
+        $documents = $this->hasMany(Files::class, ['task_id' => 'id'])->select('files.path')->all();
+        foreach ($documents as $file) {
+            $pathArray = explode('/', $file->path);
+            $url = implode('/', array_slice($pathArray, 3));
+            $filename = $pathArray[count($pathArray) - 1];
+            if ($pathArray[count($pathArray) - 2] == 'images') {
+                $thumbnail = Files::getThumbnail($filename);
+
+                $documentsArray[] = [
+                    'title' => $filename,
+                    'url' => '/' . $url,
+                    'thumbnail' => $thumbnail
+                ];
+            } else {
+                $documentsArray[] = [
+                    'title' => $filename,
+                    'url' => '/' . $url,
+                ];
+            }
+        }
+        return $documentsArray;
     }
 }

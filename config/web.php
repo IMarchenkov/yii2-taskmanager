@@ -12,6 +12,7 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@upload'=> '@app/web/upload',
     ],
     'components' => [
         'request' => [
@@ -54,7 +55,7 @@ $config = [
             ],
         ],
         'events' => [
-            'class' => \app\components\EventsComponent::class
+            'class' => \app\components\events\EventsComponent::class
         ]
     ],
     'params' => $params,

@@ -12,6 +12,7 @@ use app\models\ContactForm;
 use yii\data\ActiveDataProvider;
 use app\models\tables\Tasks;
 use app\models\tables\Users;
+use yii\caching\DbDependency;
 
 class SiteController extends Controller
 {
@@ -75,18 +76,31 @@ class SiteController extends Controller
     public function actionIndex()
     {
         if (!Yii::$app->user->isGuest) {
-            $model = new Tasks();
-            $query = $model::find()
-                ->where(['>', 'date', date('Y-m-d H:i:s')])
-                ->andWhere(['<', 'date', date('Y-m-d H:i:s', strtotime('+1 month'))])
-                ->andWhere(['user_id' => Yii::$app->user->id]);
 
-            $dataProvider = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => [
-                    'pageSize' => 5
-                ],
-            ]);
+            $userId = Yii::$app->user->id;
+            $key = 'tasks_current_task_'.$userId;
+
+            $cache = Yii::$app->cache;
+
+            $dataProvider = $cache->get($key);
+
+            if (!$dataProvider) {
+
+                $dataProvider = new ActiveDataProvider([
+                    'query' => Tasks::findCurrentTasks(),
+                    'pagination' => [
+                        'pageSize' => 5
+                    ],
+                ]);
+
+                $dependency = new DbDependency();
+                $dependency->sql = "SELECT COUNT(*) FROM tasks";
+
+                $dataProvider->prepare();
+
+                $cache->set($key, $dataProvider, 3600, $dependency);
+            }
+
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
             ]);
@@ -144,7 +158,6 @@ class SiteController extends Controller
 
     public function actionSignup()
     {
-        Yii::$app->cache->flush();
         // Создать модель и указать ей, что используется сценарий регистрации
         $model = new Users(['scenario' => Users::SCENARIO_SIGNUP]);
 

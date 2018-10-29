@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\widgets\Documents;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\tables\Tasks */
@@ -47,5 +48,9 @@ if (!$listView) {
             'user_id',
         ],
     ]) ?>
+
+    <?= Documents::widget([
+        'documents' => $model->documents
+    ]); ?>
 
 </div>

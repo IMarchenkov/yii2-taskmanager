@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\tables\Files;
 use Yii;
 use app\models\tables\Tasks;
 use app\models\search\TaskSearch;
@@ -9,6 +10,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 
 class TasksController extends Controller
@@ -72,7 +74,7 @@ class TasksController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'listView' => false
+            'listView' => false,
         ]);
     }
 
@@ -84,13 +86,23 @@ class TasksController extends Controller
     public function actionCreate()
     {
         $model = new Tasks();
+        $modelFile = new Files();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            foreach (UploadedFile::getInstances($modelFile, 'file') as $file) {
+                $modelFile->file = $file;
+                $modelFile->uploadFile($model->id);
+                $modelFile = new Files();
+            }
+
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'modelFile' => $modelFile
         ]);
     }
 
@@ -104,13 +116,22 @@ class TasksController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $modelFile = new Files();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            foreach (UploadedFile::getInstances($modelFile, 'file') as $file) {
+                $modelFile->file = $file;
+                $modelFile->uploadFile($model->id);
+                $modelFile = new Files();
+            }
+            //TODO delete old files
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'modelFile' => $modelFile
         ]);
     }
 
@@ -124,7 +145,7 @@ class TasksController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        //TODO delete old files
         return $this->redirect(['index']);
     }
 
