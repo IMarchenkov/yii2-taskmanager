@@ -132,4 +132,12 @@ class Tasks extends \yii\db\ActiveRecord
         }
         return $documentsArray;
     }
+
+    public static function getDeadlineTasks()
+    {
+        return self::find()
+            ->with('user')
+            ->andWhere(['=', 'date_end', date('Y-m-d', strtotime('+1 days'))])
+            ->all();
+    }
 }

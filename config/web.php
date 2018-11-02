@@ -3,7 +3,7 @@
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
-$baseUrl = str_replace('/web', '', (new \yii\web\Request)->getBaseUrl());
+//$baseUrl = str_replace('/web', '', (new \yii\web\Request)->getBaseUrl());
 
 $config = [
     'id' => 'basic',
@@ -35,7 +35,7 @@ $config = [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => false,
+            'useFileTransport' => true,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -48,10 +48,13 @@ $config = [
         ],
         'db' => $db,
         'urlManager' => [
-            'baseUrl' => $baseUrl,
+//            'baseUrl' => $baseUrl,
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'tasks/<id:\d+>' => 'tasks/view',
+                'tasks/update/<id:\d+>' => 'tasks/update',
+                'tasks/delete/<id:\d+>' => 'tasks/delete'
             ],
         ],
         'events' => [
