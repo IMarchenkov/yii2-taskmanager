@@ -7,6 +7,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+//    'language' => 'ru-Ru',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'events'],
     'aliases' => [
@@ -18,7 +19,7 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'taskmanger',
-            'baseUrl' => $baseUrl,
+//            'baseUrl' => $baseUrl,
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -52,6 +53,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+//                'admin*' => 'admin/tasks',
+                'tasks/' => 'tasks/index',
                 'tasks/<id:\d+>' => 'tasks/view',
                 'tasks/update/<id:\d+>' => 'tasks/update',
                 'tasks/delete/<id:\d+>' => 'tasks/delete'
@@ -59,7 +62,20 @@ $config = [
         ],
         'events' => [
             'class' => \app\components\events\EventsComponent::class
-        ]
+        ],
+        'i18n' => [
+            'translations' =>[
+                'app*' => [
+                    'class' => yii\i18n\PhpMessageSource::class,
+                    'basePath' => '@app/messages'
+                ]
+            ]
+        ],
+    ],
+    'modules' => [
+        'admin' => [
+            'class' => 'app\modules\admin\Admin',
+        ],
     ],
     'params' => $params,
 ];

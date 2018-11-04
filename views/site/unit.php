@@ -11,15 +11,15 @@ $this->registerCssFile('@web/css/tasks/style.css');
         <h2><?= $model->name ?></h2>
     </div>
     <div class="task-unit-footer">
-        <?= Html::a('Update', ['tasks/update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['tasks/delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('app', 'update'), ['tasks/update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'delete'), ['tasks/delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('View', ['tasks/view', 'id' => $model->id], [
+        <?= Html::a(Yii::t('app', 'view'), ['tasks/view', 'id' => $model->id], [
             'class' => 'btn btn-success',
         ]); ?>
     </div>

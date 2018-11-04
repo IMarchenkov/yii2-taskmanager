@@ -18,11 +18,11 @@ if (!$listView) {
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php if (!$listView): ?>
-        <p><?= Html::a('Back to Calendar', ['index']) ?></p>
+        <p><?= Html::a(Yii::t('app', 'back'), ['index']) ?></p>
     <?php endif; ?>
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('app', 'update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -30,7 +30,7 @@ if (!$listView) {
             ],
         ]) ?>
         <?php if ($listView) {
-            echo Html::a('View', ['view', 'id' => $model->id], [
+            echo Html::a(Yii::t('app', 'view'), ['view', 'id' => $model->id], [
                 'class' => 'btn btn-success',
             ]);
         } ?>

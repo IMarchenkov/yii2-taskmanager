@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use \yii\widgets\ListView;
+use app\assets\TasksAsset;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\TaskSearch */
@@ -11,6 +12,8 @@ use \yii\widgets\ListView;
 
 $this->title = 'Tasks';
 $this->params['breadcrumbs'][] = $this->title;
+
+TasksAsset::register($this);
 ?>
 <div class="tasks-index">
 
@@ -19,12 +22,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Tasks', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'create'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
-        'itemView' => 'unit',
+        'itemView' => '_unit',
         'viewParams' => [
             'listView' => true,
         ]

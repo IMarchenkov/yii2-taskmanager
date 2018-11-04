@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
@@ -78,7 +79,7 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
 
             $userId = Yii::$app->user->id;
-            $key = 'tasks_current_task_'.$userId;
+            $key = 'tasks_current_task_' . $userId;
 
             $cache = Yii::$app->cache;
 
@@ -167,7 +168,22 @@ class SiteController extends Controller
 
         // Вывести форму
         return $this->render('signup', [
-            'model'=>$model
+            'model' => $model
         ]);
+    }
+
+    public function actionSetlanguage()
+    {
+        $session = Yii::$app->session;
+
+        $language = $session->get('langauge');
+        if ($language == 'ru-Ru')
+            $language = 'en-En';
+        else
+            $language = 'ru-Ru';
+
+        $session->set('langauge', $language);
+
+        return $this->goBack(Yii::$app->request->referrer);
     }
 }

@@ -21,8 +21,22 @@ class EventsComponent extends Component
     {
         parent::init();
 
+        self::setLanguage();
+
         Event::on(Tasks::class, Tasks::EVENT_AFTER_INSERT, [OnCreate::class, 'handlerTaskCreate']);
 
         Event::on(Users::class, Users::EVENT_BEFORE_INSERT, [OnCreate::class, 'handlerUserCreate']);
+    }
+
+    protected static function setLanguage()
+    {
+        $session = Yii::$app->session;
+
+        $language = $session->get('langauge');
+        if (!$language)
+            $language = 'ru-Ru';
+
+        $session->set('langauge', $language);
+        Yii::$app->language = $language;
     }
 }
